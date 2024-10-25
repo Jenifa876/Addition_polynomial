@@ -1,0 +1,169 @@
+#include<iostream>
+using namespace std;
+class Node
+{
+    public:
+    int coeff,expo;
+    Node* next;
+    Node()
+    {}
+    Node(int coeff,int expo)
+    {
+        this->coeff=coeff;
+        this->expo=expo;
+        this->next=NULL;
+    }
+};
+Node* mulpoly(Node* poly1,Node* poly2)
+{
+    Node*result=NULL;
+    Node* temp=NULL;
+    int sum=0;
+    while(poly1!=NULL && poly2!=NULL)
+    {
+        if(poly1->expo==poly2->expo)
+        {
+            sum=poly1->coeff+poly2->coeff;
+            if(result==NULL)
+            {
+                result=new Node(sum,poly1->expo);
+                temp=result;
+            }
+            else
+            {
+                temp->next=new Node(sum,poly1->expo);
+                temp=temp->next;
+            }
+            poly1=poly1->next;
+            poly2=poly2->next;
+        }
+        else if(poly1->expo>poly2->expo)
+        {
+            if(result==NULL)
+            {
+                result=new Node(poly1->coeff,poly1->expo);
+                temp=result;
+            }
+            else
+            {
+                temp->next=new Node(poly1->coeff,poly1->expo);
+                temp=temp->next;
+            }
+            poly1=poly1->next;
+        }
+        else
+        {
+            if(result==NULL)
+            {
+                result=new Node(poly2->coeff,poly2->expo);
+                temp=result;
+            }
+            else
+            {
+                temp->next=new Node(poly2->coeff,poly2->expo);
+                temp=temp->next;
+            }
+            poly2=poly2->next;            
+        }
+    }
+    while(poly1!=NULL)
+    {
+        if(result==NULL)
+        {
+            result=new Node(poly1->coeff,poly1->expo);
+            temp=result;
+        }
+        else
+        {
+            temp->next=new Node(poly1->coeff,poly1->expo);
+            temp=temp->next;
+        }
+        poly1=poly1->next;
+    }
+    while(poly2!=NULL)
+    {
+        if(result==NULL)
+        {
+            result=new Node(poly2->coeff,poly2->expo);
+            temp=result;
+        }
+        else
+        {
+            temp->next=new Node(poly2->coeff,poly2->expo);
+            temp=temp->next;
+        }
+        poly2=poly2->next;
+    }
+    return result;
+}
+void print(Node* poly)
+{
+    Node* temp=poly;
+    while(temp!=NULL)
+    {
+        cout<<temp->coeff<<"x^"<<temp->expo;
+        if(temp->next!=NULL)
+        {
+            cout<<" + ";
+        }
+        temp=temp->next;
+    }
+}
+int main()
+{
+    int n1,n2;
+    Node* poly1=NULL;
+    Node* poly2=NULL;
+    Node* result=NULL;
+    cout<<"Enter the no of terms for polynomial1:";
+    cin>>n1;
+    for(int i=0;i<n1;i++)
+    {
+        int coeff,expo;
+        cout<<"Enter the coeff and expo:";
+        cin>>coeff>>expo;
+        Node* newnode=new Node(coeff,expo);
+        if(poly1==NULL)
+        {
+            poly1=newnode;
+        }
+        else
+        {
+            Node* temp=poly1;
+            while(temp->next!=NULL)
+            {
+                temp=temp->next;
+            }
+            temp->next=newnode;
+        }
+    }
+    cout<<"Enter the no of terms for polynomial2:";
+    cin>>n2;
+    for(int i=0;i<n2;i++)
+    {
+        int coeff,expo;
+        cout<<"Enter the coeff and expo:";
+        cin>>coeff>>expo;
+        Node* newnode=new Node(coeff,expo);
+        if(poly2==NULL)
+        {
+            poly2=newnode;
+        }
+        else
+        {
+            Node* temp=poly2;
+            while(temp->next!=NULL)
+            {
+                temp=temp->next;
+            }
+            temp->next=newnode;
+        }
+    }
+    cout<<"\nPolynomial1: ";
+    print(poly1);
+    cout<<"\npolynomial2: ";
+    print(poly2);
+    cout<<"\nAddition of polynomials:";
+    result=mulpoly(poly1,poly2);
+    print(result);
+}
